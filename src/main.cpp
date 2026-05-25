@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 
+#include "../include/VersionManager.h"
 #include "../include/DependencyManager.h"
 #include "../include/Component.h"
 
@@ -10,6 +11,7 @@ using namespace std;
 
 vector<Component> components;
 DependencyManager dependencyManager;
+VersionManager versionManager;
 void addComponent();
 void displayComponents();
 void searchComponent();
@@ -20,6 +22,10 @@ void loadFromFile();
 void addDependency();
 void showDependencies();
 void checkCircularDependency();
+void addVersion();
+void showVersions();
+void rollbackVersion();
+void showLatestVersion();
 
 void addComponent() {
 
@@ -260,6 +266,57 @@ void checkCircularDependency() {
     }
 }
 
+void addVersion() {
+
+    string componentId;
+    string version;
+
+    cout << "\nEnter Component ID: ";
+    cin >> componentId;
+
+    cout << "Enter Version: ";
+    cin >> version;
+
+    versionManager.addVersion(
+        componentId,
+        version
+    );
+
+    cout << "\nVersion Added Successfully.\n";
+}
+
+void showVersions() {
+
+    string componentId;
+
+    cout << "\nEnter Component ID: ";
+    cin >> componentId;
+
+    versionManager.showVersions(componentId);
+}
+
+void rollbackVersion() {
+
+    string componentId;
+
+    cout << "\nEnter Component ID: ";
+    cin >> componentId;
+
+    versionManager.rollbackVersion(componentId);
+}
+
+void showLatestVersion() {
+
+    string componentId;
+
+    cout << "\nEnter Component ID: ";
+    cin >> componentId;
+
+    cout << "\nLatest Version: "
+         << versionManager.getLatestVersion(componentId)
+         << endl;
+}
+
 int main() {
     loadFromFile();
 
@@ -278,7 +335,11 @@ int main() {
         cout << "7. Add Dependency\n";
         cout << "8. Show Dependencies\n";
         cout << "9. Check Circular Dependency\n";
-        cout << "10. Exit\n";
+        cout << "10. Add Version\n";
+        cout << "11. Show Version History\n";
+        cout << "12. Rollback Version\n";
+        cout << "13. Show Latest Version\n";
+        cout << "14. Exit\n";
 
         cout << "\nEnter Choice: ";
         cin >> choice;
@@ -323,6 +384,22 @@ int main() {
             break;
 
         case 10:
+            addVersion();
+            break;
+
+        case 11:
+            showVersions();
+            break;
+
+        case 12:
+            rollbackVersion();
+            break;
+
+        case 13:
+            showLatestVersion();
+            break;
+
+        case 14:
             cout << "\nExiting Program...\n";
             return 0;
         }
