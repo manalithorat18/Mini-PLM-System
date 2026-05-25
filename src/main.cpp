@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 
+#include "../include/Logger.h"
 #include "../include/VersionManager.h"
 #include "../include/DependencyManager.h"
 #include "../include/Component.h"
@@ -26,6 +27,7 @@ void addVersion();
 void showVersions();
 void rollbackVersion();
 void showLatestVersion();
+void showAnalytics();
 
 void addComponent() {
 
@@ -61,6 +63,9 @@ void addComponent() {
     components.push_back(c);
 
     cout << "\nComponent Added Successfully!\n";
+
+    Logger::log(
+        "Component Added: " + id);
 }
 
 void displayComponents() {
@@ -143,6 +148,9 @@ void updateComponent() {
     }
 
     cout << "\nComponent Not Found.\n";
+
+    Logger::log(
+        "Component Updated: " + searchId);
 }
 
 void deleteComponent() {
@@ -165,6 +173,9 @@ void deleteComponent() {
     }
 
     cout << "\nComponent Not Found.\n";
+
+    Logger::log(
+        "Component Deleted: " + searchId);
 }
 
 void saveToFile() {
@@ -246,6 +257,9 @@ void addDependency() {
     dependencyManager.addDependency(from, to);
 
     cout << "\nDependency Added Successfully.\n";
+
+    Logger::log(
+        "Dependency Added: " + from + " -> " + to);
 }
 
 void showDependencies() {
@@ -317,6 +331,35 @@ void showLatestVersion() {
          << endl;
 }
 
+void showAnalytics() {
+
+    cout << "\n===== Analytics Dashboard =====\n";
+
+    cout << "Total Components: "
+         << components.size()
+         << endl;
+
+    int approved = 0;
+    int pending = 0;
+
+    for (Component c : components) {
+
+        if (c.getStatus() == "Approved")
+            approved++;
+
+        else
+            pending++;
+    }
+
+    cout << "Approved Components: "
+         << approved
+         << endl;
+
+    cout << "Pending Components: "
+         << pending
+         << endl;
+}
+
 int main() {
     loadFromFile();
 
@@ -339,7 +382,8 @@ int main() {
         cout << "11. Show Version History\n";
         cout << "12. Rollback Version\n";
         cout << "13. Show Latest Version\n";
-        cout << "14. Exit\n";
+        cout << "14. Analytics Dashboard\n";
+        cout << "15. Exit\n";
 
         cout << "\nEnter Choice: ";
         cin >> choice;
@@ -400,6 +444,10 @@ int main() {
             break;
 
         case 14:
+            showAnalytics();
+            break;
+
+        case 15:
             cout << "\nExiting Program...\n";
             return 0;
         }
