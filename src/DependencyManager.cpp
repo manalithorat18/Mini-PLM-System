@@ -10,7 +10,9 @@ void DependencyManager::addDependency(
 
 void DependencyManager::showDependencies() {
 
-    cout << "\n===== Dependency Graph =====\n";
+    cout << "\n====================================\n";
+    cout << "Dependency Graph\n";
+    cout << "====================================\n";
 
     for (auto pair : graph) {
 

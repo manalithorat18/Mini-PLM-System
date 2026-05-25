@@ -19,6 +19,9 @@ void VersionManager::showVersions(
         return;
     }
 
+    cout << "\n====================================\n";
+    cout << "Version History\n";
+    cout << "====================================\n";
     cout << "\nVersion History for "
          << componentId
          << ":\n";

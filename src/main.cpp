@@ -28,6 +28,9 @@ void showVersions();
 void rollbackVersion();
 void showLatestVersion();
 void showAnalytics();
+void filterByStatus();
+void exportReport();
+void printHeader(string title);
 
 void addComponent() {
 
@@ -143,14 +146,14 @@ void updateComponent() {
 
             cout << "\nComponent Updated Successfully.\n";
 
+            Logger::log(
+                "Component Updated: " + searchId);
+
             return;
         }
     }
 
     cout << "\nComponent Not Found.\n";
-
-    Logger::log(
-        "Component Updated: " + searchId);
 }
 
 void deleteComponent() {
@@ -168,14 +171,14 @@ void deleteComponent() {
 
             cout << "\nComponent Deleted Successfully.\n";
 
+            Logger::log(
+                "Component Deleted: " + searchId);
+
             return;
         }
     }
 
     cout << "\nComponent Not Found.\n";
-
-    Logger::log(
-        "Component Deleted: " + searchId);
 }
 
 void saveToFile() {
@@ -333,7 +336,7 @@ void showLatestVersion() {
 
 void showAnalytics() {
 
-    cout << "\n===== Analytics Dashboard =====\n";
+    printHeader("Analytics Dashboard");
 
     cout << "Total Components: "
          << components.size()
@@ -360,6 +363,88 @@ void showAnalytics() {
          << endl;
 }
 
+void filterByStatus() {
+
+    string status;
+
+    cout << "\nEnter Status: ";
+    cin >> status;
+
+    bool found = false;
+
+    for (Component c : components) {
+
+        if (c.getStatus() == status) {
+
+            c.display();
+            found = true;
+        }
+    }
+
+    if (!found) {
+
+        cout << "\nNo Matching Components Found.\n";
+    }
+}
+
+void exportReport() {
+
+    ofstream file("data/report.txt");
+
+    if (!file) {
+
+        cout << "\nError Creating Report.\n";
+        return;
+    }
+
+    file << "====================================\n";
+    file << "MINI PLM REPORT\n";
+    file << "====================================\n\n";
+
+    file << "Total Components: "
+         << components.size()
+         << "\n\n";
+
+    for (Component c : components) {
+
+        file << "ID: "
+             << c.getId()
+             << endl;
+
+        file << "Name: "
+             << c.getName()
+             << endl;
+
+        file << "Version: "
+             << c.getVersion()
+             << endl;
+
+        file << "Owner: "
+             << c.getOwner()
+             << endl;
+
+        file << "Status: "
+             << c.getStatus()
+             << endl;
+
+        file << "---------------------\n";
+    }
+
+    file.close();
+
+    cout << "\nReport Exported Successfully.\n";
+}
+
+void printHeader(string title) {
+
+    cout << "\n====================================\n";
+
+    cout << title << endl;
+
+    cout << "====================================\n";
+}
+
+
 int main() {
     loadFromFile();
 
@@ -367,7 +452,7 @@ int main() {
 
     while (true) {
 
-        cout << "\n========== Mini PLM ==========\n";
+        printHeader("Mini PLM System");
 
         cout << "1. Add Component\n";
         cout << "2. Display Components\n";
@@ -383,73 +468,97 @@ int main() {
         cout << "12. Rollback Version\n";
         cout << "13. Show Latest Version\n";
         cout << "14. Analytics Dashboard\n";
-        cout << "15. Exit\n";
+        cout << "15. Filter By Status\n";
+        cout << "16. Export Report\n";
+        cout << "17. Exit\n";
 
         cout << "\nEnter Choice: ";
         cin >> choice;
 
-        switch (choice)
+        try
+        {
+            switch (choice)
+            {
+
+            case 1:
+                addComponent();
+                break;
+
+            case 2:
+                displayComponents();
+                break;
+
+            case 3:
+                searchComponent();
+                break;
+
+            case 4:
+                updateComponent();
+                break;
+
+            case 5:
+                deleteComponent();
+                break;
+
+            case 6:
+                saveToFile();
+                break;
+
+            case 7:
+                addDependency();
+                break;
+
+            case 8:
+                showDependencies();
+                break;
+
+            case 9:
+                checkCircularDependency();
+                break;
+
+            case 10:
+                addVersion();
+                break;
+
+            case 11:
+                showVersions();
+                break;
+
+            case 12:
+                rollbackVersion();
+                break;
+
+            case 13:
+                showLatestVersion();
+                break;
+
+            case 14:
+                showAnalytics();
+                break;
+
+            case 15:
+                filterByStatus();
+                break;
+
+            case 16:
+                exportReport();
+                break;
+
+            case 17:
+                cout << "\nExiting Program...\n";
+                return 0;
+
+            default:
+                cout << "\nInvalid Choice.\n";
+            }
+        }
+
+        catch (exception &e)
         {
 
-        case 1:
-            addComponent();
-            break;
-
-        case 2:
-            displayComponents();
-            break;
-
-        case 3:
-            searchComponent();
-            break;
-
-        case 4:
-            updateComponent();
-            break;
-
-        case 5:
-            deleteComponent();
-            break;
-
-        case 6:
-            saveToFile();
-            break;
-
-        case 7:
-            addDependency();
-            break;
-
-        case 8:
-            showDependencies();
-            break;
-
-        case 9:
-            checkCircularDependency();
-            break;
-
-        case 10:
-            addVersion();
-            break;
-
-        case 11:
-            showVersions();
-            break;
-
-        case 12:
-            rollbackVersion();
-            break;
-
-        case 13:
-            showLatestVersion();
-            break;
-
-        case 14:
-            showAnalytics();
-            break;
-
-        case 15:
-            cout << "\nExiting Program...\n";
-            return 0;
+            cout << "\nException Occurred: "
+                 << e.what()
+                 << endl;
         }
     }
 

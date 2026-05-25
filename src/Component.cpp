@@ -40,7 +40,9 @@ string Component::getStatus() {
 
 void Component::display() {
 
-    cout << "\n===== Component Details =====\n";
+    cout << "\n====================================\n";
+    cout << "Component Details\n";
+    cout << "====================================\n";
 
     cout << "ID: " << id << endl;
     cout << "Name: " << name << endl;

@@ -1,0 +1,30 @@
+====================================
+MINI PLM REPORT
+====================================
+
+Total Components: 4
+
+ID: C101
+Name: Engine
+Version: v1
+Owner: Manali
+Status: Pending
+---------------------
+ID: C102
+Name: Bolt
+Version: v1
+Owner: Tejas
+Status: Pending
+---------------------
+ID: C103
+Name: Washer
+Version: v1
+Owner: Radha
+Status: Approved
+---------------------
+ID: C104
+Name: Nut
+Version: v1
+Owner: Ram
+Status: Approved
+---------------------
