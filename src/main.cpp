@@ -1,5 +1,7 @@
 #include <iostream>
 #include <vector>
+#include <fstream>
+#include <sstream>
 
 #include "../include/Component.h"
 
@@ -11,6 +13,8 @@ void displayComponents();
 void searchComponent();
 void updateComponent();
 void deleteComponent();
+void saveToFile();
+void loadFromFile();
 
 void addComponent() {
 
@@ -152,7 +156,73 @@ void deleteComponent() {
     cout << "\nComponent Not Found.\n";
 }
 
+void saveToFile() {
+
+    ofstream file("data/components.txt");
+
+    if (!file) {
+
+        cout << "\nError Opening File.\n";
+        return;
+    }
+
+    for (Component c : components) {
+
+        file
+            << c.getId() << ","
+            << c.getName() << ","
+            << c.getVersion() << ","
+            << c.getOwner() << ","
+            << c.getStatus() << endl;
+    }
+
+    file.close();
+
+    cout << "\nData Saved Successfully.\n";
+}
+
+void loadFromFile() {
+
+    ifstream file("data/components.txt");
+
+    if (!file) {
+        return;
+    }
+
+    string line;
+
+    while (getline(file, line)) {
+
+        stringstream ss(line);
+
+        string id;
+        string name;
+        string version;
+        string owner;
+        string status;
+
+        getline(ss, id, ',');
+        getline(ss, name, ',');
+        getline(ss, version, ',');
+        getline(ss, owner, ',');
+        getline(ss, status, ',');
+
+        components.push_back(
+            Component(
+                id,
+                name,
+                version,
+                owner,
+                status
+            )
+        );
+    }
+
+    file.close();
+}
+
 int main() {
+    loadFromFile();
 
     int choice;
 
@@ -165,7 +235,8 @@ int main() {
         cout << "3. Search Component\n";
         cout << "4. Update Component\n";
         cout << "5. Delete Component\n";
-        cout << "6. Exit\n";
+        cout << "6. Save Data\n";
+        cout << "7. Exit\n";
 
         cout << "\nEnter Choice: ";
         cin >> choice;
@@ -194,6 +265,10 @@ int main() {
             break;
 
         case 6:
+            saveToFile();
+            break;
+
+        case 7:
             cout << "\nExiting Program...\n";
             return 0;
         }
