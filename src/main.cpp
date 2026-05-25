@@ -3,11 +3,13 @@
 #include <fstream>
 #include <sstream>
 
+#include "../include/DependencyManager.h"
 #include "../include/Component.h"
 
 using namespace std;
 
 vector<Component> components;
+DependencyManager dependencyManager;
 void addComponent();
 void displayComponents();
 void searchComponent();
@@ -15,6 +17,9 @@ void updateComponent();
 void deleteComponent();
 void saveToFile();
 void loadFromFile();
+void addDependency();
+void showDependencies();
+void checkCircularDependency();
 
 void addComponent() {
 
@@ -221,6 +226,40 @@ void loadFromFile() {
     file.close();
 }
 
+void addDependency() {
+
+    string from;
+    string to;
+
+    cout << "\nEnter Parent Component: ";
+    cin >> from;
+
+    cout << "Enter Dependency Component: ";
+    cin >> to;
+
+    dependencyManager.addDependency(from, to);
+
+    cout << "\nDependency Added Successfully.\n";
+}
+
+void showDependencies() {
+
+    dependencyManager.showDependencies();
+}
+
+void checkCircularDependency() {
+
+    if (dependencyManager.hasCycle()) {
+
+        cout << "\nCircular Dependency Detected!\n";
+    }
+
+    else {
+
+        cout << "\nNo Circular Dependency Found.\n";
+    }
+}
+
 int main() {
     loadFromFile();
 
@@ -236,7 +275,10 @@ int main() {
         cout << "4. Update Component\n";
         cout << "5. Delete Component\n";
         cout << "6. Save Data\n";
-        cout << "7. Exit\n";
+        cout << "7. Add Dependency\n";
+        cout << "8. Show Dependencies\n";
+        cout << "9. Check Circular Dependency\n";
+        cout << "10. Exit\n";
 
         cout << "\nEnter Choice: ";
         cin >> choice;
@@ -269,6 +311,18 @@ int main() {
             break;
 
         case 7:
+            addDependency();
+            break;
+
+        case 8:
+            showDependencies();
+            break;
+
+        case 9:
+            checkCircularDependency();
+            break;
+
+        case 10:
             cout << "\nExiting Program...\n";
             return 0;
         }
